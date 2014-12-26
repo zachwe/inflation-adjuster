@@ -1,0 +1,459 @@
+/* normalize.css v3.0.0 | MIT License | git.io/normalize */
+html {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+  display: block;
+}
+audio,
+canvas,
+progress,
+video {
+  display: inline-block;
+  vertical-align: baseline;
+}
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+[hidden],
+template {
+  display: none;
+}
+a {
+  background: transparent;
+}
+a:active,
+a:hover {
+  outline: 0;
+}
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+b,
+strong {
+  font-weight: bold;
+}
+dfn {
+  font-style: italic;
+}
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+mark {
+  background: #ff0;
+  color: #000;
+}
+small {
+  font-size: 80%;
+}
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+img {
+  border: 0;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+figure {
+  margin: 1em 40px;
+}
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+pre {
+  overflow: auto;
+}
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+button {
+  overflow: visible;
+}
+button,
+select {
+  text-transform: none;
+}
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+input {
+  line-height: normal;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+input[type="search"] {
+  -webkit-appearance: textfield;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+legend {
+  border: 0;
+  padding: 0;
+}
+textarea {
+  overflow: auto;
+}
+optgroup {
+  font-weight: bold;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+td,
+th {
+  padding: 0;
+}
+@font-face {
+  font-family: 'AdelleSans-Bold';
+  src: url("/fonts/AdelleSansWeb/AdelleSansBasic_Bold.eot");
+  src: url("/fonts/AdelleSansWeb/AdelleSansBasic_Bold.eot?#iefix") format('embedded-opentype'), url("/fonts/AdelleSansWeb/AdelleSansBasic_Bold.woff") format('woff'), url("/fonts/AdelleSansWeb/AdelleSansBasic_Bold.ttf") format('truetype');
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'AdelleSans-Light';
+  src: url("/fonts/AdelleSansWeb/AdelleSansBasic_Light.eot");
+  src: url("/fonts/AdelleSansWeb/AdelleSansBasic_Light.eot?#iefix") format('embedded-opentype'), url("/fonts/AdelleSansWeb/AdelleSansBasic_Light.woff") format('woff'), url("/fonts/AdelleSansWeb/AdelleSansBasic_Light.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'AdelleSans-Regular';
+  src: url("/fonts/AdelleSansWeb/AdelleSansBasic_Regular.eot");
+  src: url("/fonts/AdelleSansWeb/AdelleSansBasic_Regular.eot?#iefix") format('embedded-opentype'), url("/fonts/AdelleSansWeb/AdelleSansBasic_Regular.woff") format('woff'), url("/fonts/AdelleSansWeb/AdelleSansBasic_Regular.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'PT Serif';
+  src: url("http:/fonts/PTSerif/PTF55F.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'QZIcons';
+  src: url("/fonts/qz-icons.eot?-b9yf6n1"), url("/fonts/qz-icons.eot?#iefix-b9yf6n1") format('embedded-opentype'), url("/fonts/qz-icons.woff?-b9yf6n1") format('woff'), url("/fonts/qz-icons.ttf?-b9yf6n1") format('truetype'), url("/fonts/qz-icons.svg?-b9yf6n1#qz-icons") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.icon {
+  font-family: 'QZIcons';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.icon-expand-arrow:before {
+  content: "\e607";
+}
+.icon-instagram:before {
+  content: "\e612";
+}
+.icon-link:before {
+  content: "\e61b";
+}
+.icon-share:before {
+  content: "\e61c";
+}
+.icon-reply-arrow:before {
+  content: "\e618";
+}
+.icon-star:before {
+  content: "\e619";
+}
+.icon-www:before {
+  content: "\e61a";
+}
+.icon-left-arrow:before {
+  content: "\e617";
+}
+.icon-annotations-rollover:before {
+  content: "\e600";
+}
+.icon-annotations:before {
+  content: "\e601";
+}
+.icon-camera:before {
+  content: "\e602";
+}
+.icon-close:before {
+  content: "\e603";
+}
+.icon-daily-brief:before {
+  content: "\e604";
+}
+.icon-down-arrow:before {
+  content: "\e605";
+}
+.icon-email:before {
+  content: "\e606";
+}
+.icon-facebook:before {
+  content: "\e608";
+}
+.icon-google-plus:before {
+  content: "\e609";
+}
+.icon-hamburrow:before {
+  content: "\e60a";
+}
+.icon-linkedin:before {
+  content: "\e60b";
+}
+.icon-pause:before {
+  content: "\e60c";
+}
+.icon-pinterest:before {
+  content: "\e60d";
+}
+.icon-play:before {
+  content: "\e60e";
+}
+.icon-quartz:before {
+  content: "\e60f";
+}
+.icon-search:before {
+  content: "\e610";
+}
+.icon-settings:before {
+  content: "\e611";
+}
+.icon-sponsored:before {
+  content: "\e613";
+}
+.icon-twitter:before {
+  content: "\e614";
+}
+.icon-whats-app:before {
+  content: "\e615";
+}
+.icon-zoom:before {
+  content: "\e616";
+}
+ul.share-buttons {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+li.share-icon {
+  display: inline-block;
+  font-size: 1.2em;
+}
+li.share-icon a {
+  text-decoration: none;
+  cursor: pointer;
+}
+.icon-email {
+  color: #0096b6;
+}
+.icon-email:hover {
+  color: #c3c5c0;
+}
+.icon-facebook {
+  color: #3b5998;
+}
+.icon-facebook:hover {
+  color: #c3c5c0;
+}
+.icon-linkedin {
+  color: #007bb6;
+}
+.icon-linkedin:hover {
+  color: #c3c5c0;
+}
+.icon-twitter {
+  color: #00aced;
+}
+.icon-twitter:hover {
+  color: #c3c5c0;
+}
+@media only screen and (max-width: 320px) {
+  #interactive-content {
+    font-size: 16px/26px "PT Serif", Georgia, serif;
+  }
+  #interactive-content h1 {
+    font-size: 40px;
+    line-height: 28px;
+  }
+  #interactive-content h2 {
+    font-size: 20px;
+    line-height: 20px;
+  }
+}
+@media only screen and (min-width: 480px) and (max-width: 650px) {
+  #interactive-content {
+    font: 16px/26px "PT Serif", Georgia, serif;
+  }
+  #interactive-content h1 {
+    font-size: 30px;
+    line-height: 28px;
+  }
+  #interactive-content h2 {
+    font-size: 20px;
+    line-height: 20px;
+  }
+}
+@media only screen and (min-width: 650px) and (max-width: 1024px) {
+  #interactive-content {
+    font: 20px/30px "PT Serif", Georgia, serif;
+  }
+  #interactive-content h1 {
+    font-size: 40px;
+    line-height: 28px;
+  }
+  #interactive-content h2 {
+    font-size: 24px;
+    line-height: 24px;
+  }
+}
+@media only screen and (min-width: 1024px) and (max-width: 1200px) {
+  #interactive-content {
+    font: 20px/30px "PT Serif", Georgia, serif;
+  }
+  #interactive-content h1 {
+    font-size: 40px;
+    line-height: 50px;
+  }
+  #interactive-content h2 {
+    font-size: 24px;
+    line-height: 24px;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  #interactive-content {
+    font: 20px/30px "PT Serif", Georgia, serif;
+  }
+  #interactive-content h1 {
+    font-size: 48px;
+    line-height: 58px;
+  }
+  #interactive-content h2 {
+    font-size: 24px;
+    line-height: 24px;
+  }
+}
+html,
+body {
+  min-width: 290px;
+  overflow: hidden;
+  font-family: "PT Serif", Georgia, serif;
+  color: #4c4c4c;
+  background-color: #f9f9f9;
+}
+h1,
+h2,
+h4,
+h5 {
+  font-family: 'AdelleSans-Bold', "Helvetica", Arial, sans-serif;
+  color: #333;
+}
+h1 {
+  line-height: 50px;
+  margin-bottom: 10px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 24px;
+  font-style: bold;
+  margin: 40px 0px;
+}
+h3 {
+  font-size: 20px;
+  font-family: "PT Serif", Georgia, serif;
+  color: #333;
+  font-weight: bold;
+}
+p {
+  position: relative;
+  margin: 0 0 0 0;
+  padding: 16px 0 16px 0;
+  line-height: 1.6;
+  color: #4c4c4c;
+}
+.item-body {
+  margin: 0 auto;
+  max-width: 940px;
+}
+#interactive-content {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
