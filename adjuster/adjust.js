@@ -23,7 +23,7 @@ var Adjuster = function(data, frequency) {
             });
             return [min, max];
         })(this.data);
-
+        // supply the frequency or guess.
         this.frequency = frequency || (function(d) {
             var dateDict = {};
             d.forEach(function(v, i, ar) {
@@ -63,7 +63,8 @@ var Adjuster = function(data, frequency) {
                     file_type: "json",
                     frequency: frequency, aggregation_method: aggmethod, units: units};
         
-        // Get the value we're adjusting to.
+        // Get the value we're adjusting to. Do this by getting it all and
+        // using the latest value.
         var getUnitsData = (function(cb) {
             request({url: self.FRED_REST_ENDPT, qs: unitsParams}, function(error, response, body) {
                 if( !error  && response.statusCode == 200) {
@@ -86,6 +87,7 @@ var Adjuster = function(data, frequency) {
                 var inflationData = JSON.parse(body).observations;
                 var inflationObj = {};
                 inflationData.forEach(function(v, i, ar) {
+                    if(v.value == ".") return;
                     var dateString = v.date.substring(0, v.date.length - 3);
                     // keys in inflationObj look like YYYY-MM
                     inflationObj[dateString] = v.value; 

@@ -22,7 +22,7 @@ var utils  = require("./gulp/utils");
 
 
 var thingName = 'inflation-adjust';
-var qzdataPath = './build';
+var qzdataPath = '../adjuster/public';
 
 var isProd = args.build ? true : false;
 var env = isProd ? "prod" : "dev";
