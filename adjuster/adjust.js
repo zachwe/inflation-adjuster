@@ -1,13 +1,11 @@
 var request = require('request');
 var ndarray = require('ndarray');
+var constants = require("./constants");
 
 var Adjuster = function(data, frequency) {
     // Let's have data be an array of arrays. [[d1, v1], [d2, v2], ...]
     // the d's should be Date objects. v's should be integers.
     this.data = data;
-    this.FRED_API_KEY = process.env.FRED_API_KEY;
-    this.FRED_REST_ENDPT = "http://api.stlouisfed.org/fred/series/observations";
-    this.CPI_SERIES_ID = "CPIAUCSL";
     if(this.data) {
         this.dateRange = (function(d) {
             var max = 0,
@@ -54,19 +52,19 @@ var Adjuster = function(data, frequency) {
         var units = "lin";
         // params for getting historical data.
         var params = {observation_start: opts.startdate, observation_end: opts.enddate,
-                    api_key: this.FRED_API_KEY, series_id: self.CPI_SERIES_ID, 
+                    api_key: constants.FRED_API_KEY, series_id: constants.CPI_SERIES_ID, 
                     file_type: "json",
                     frequency: frequency, aggregation_method: aggmethod, units: units};
 
         // params for getting value we're adjusting to.
-        var unitsParams = { api_key: self.FRED_API_KEY, series_id: self.CPI_SERIES_ID, 
+        var unitsParams = { api_key: constants.FRED_API_KEY, series_id: constants.CPI_SERIES_ID, 
                     file_type: "json",
                     frequency: frequency, aggregation_method: aggmethod, units: units};
         
         // Get the value we're adjusting to. Do this by getting it all and
         // using the latest value.
         var getUnitsData = (function(cb) {
-            request({url: self.FRED_REST_ENDPT, qs: unitsParams}, function(error, response, body) {
+            request({url: constants.FRED_REST_ENDPT, qs: unitsParams}, function(error, response, body) {
                 if( !error  && response.statusCode == 200) {
                     var bodyObj = JSON.parse(body).observations;
                     var index = bodyObj.length - 1;
@@ -82,7 +80,7 @@ var Adjuster = function(data, frequency) {
             });
         });
 
-        request({url: this.FRED_REST_ENDPT, qs: params}, function(error, response, body) {
+        request({url: constants.FRED_REST_ENDPT, qs: params}, function(error, response, body) {
             if(!error && response.statusCode == 200) {
                 var inflationData = JSON.parse(body).observations;
                 var inflationObj = {};
@@ -128,4 +126,4 @@ var Adjuster = function(data, frequency) {
     };
 };
 
-module.exports = new Adjuster();
+module.exports = Adjuster;

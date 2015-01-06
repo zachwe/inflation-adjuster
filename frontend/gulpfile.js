@@ -1,7 +1,7 @@
 var gulp = require("gulp");
 var browserify = require("browserify");
 var transform = require("vinyl-transform");
-destination = "../listentogithub/public/javascripts";
+destination = "../adjuster/public/javascripts";
 
 gulp.task("browserify", [], function() {
     /*
