@@ -4,13 +4,13 @@ var router = express.Router();
 
 router.get('/', function(req, res) {
     var adjuster;
-    console.log(req.query);
     if(req.query.data && req.query.data.length > 0) {
         var keys = Object.keys(req.query.data[0]);
-        if(keys.includes("date") && keys.length == 2) {
+        if(keys.indexOf("date") != -1 && keys.length == 2) {
             var valueName = keys[1 - keys.indexOf("date")];
             var flatData = req.query.data.map(function(v, i, ar) {
-                return [v.date, v[valueName]];
+                var date = new Date("" + v.date);
+                return [date, v[valueName]];
             });
             adjuster = new Adjuster(flatData);
             adjuster.getInflationNumbers({}, function(data){

@@ -7,33 +7,20 @@ var Adjuster = function(data, frequency) {
     // the d's should be Date objects. v's should be integers.
     this.data = data;
     if(this.data) {
-        this.dateRange = (function(d) {
-            var max = 0,
-                min = Number.MAX_SAFE_INTEGER;
-            d.forEach(function(v, i, ar) {
-                var time = v[0].getTime();
-                if(time > max) {
-                    max = v[0];
-                }
-                if(time < min) {
-                    min = v[0];
-                }
-            });
-            return [min, max];
-        })(this.data);
         // supply the frequency or guess.
         this.frequency = frequency || (function(d) {
             var dateDict = {};
+            var ret = "a";
             d.forEach(function(v, i, ar) {
-                var thisYear = v[0].getFullYear();
-                var thisMonth = v[0].getMonth();
+                var thisYear = v[0].getUTCFullYear();
+                var thisMonth = v[0].getUTCMonth();
                 if(thisYear in dateDict && dateDict[thisYear] != thisMonth) {
-                    dateDict[v[0].getFullYear()] = thisMonth;
+                    ret = "m";
                 } else {
-                    return "m";
+                    dateDict[thisYear] = thisMonth;
                 }
             });
-            return "a";
+            return ret;
         })(this.data);
     }
     var self = this;
@@ -45,25 +32,35 @@ var Adjuster = function(data, frequency) {
         // back August 1. 
         // m, q, sa, or a.
         // For monthly, quarterly, semi-annual, or annual.
-        var frequency = opts.freq || "a", 
+        var frequency = opts.freq || "a",
         // sum, eop, avg. Only use avg realistically.
             aggmethod = opts.agg || "avg",
-            target = opts.target || "9999-12-31";
+            target = opts.target || "9999-12-31",
+            startdate = opts.startdate || (function() {
+                // return minimum date in data.
+                return this.data.reduce(function(prev, val, i, ar) {
+                    if(prev[0].getTime() < val[0].getTime()) {
+                        return prev;
+                    } else {
+                        return val;
+                    }
+                })[0];
+            }).call(this),
+            enddate = opts.enddate || (function() {
+                // return maximum date in data.
+                return this.data.reduce(function(prev, val, i, ar) {
+                    if(prev[0].getTime() < val[0].getTime()) {
+                        return val;
+                    } else {
+                        return prev;
+                    }
+                })[0];
+            }).call(this);
         var units = "lin";
-        // params for getting historical data.
-        var params = {observation_start: opts.startdate, observation_end: opts.enddate,
-                    api_key: constants.FRED_API_KEY, series_id: constants.CPI_SERIES_ID, 
-                    file_type: "json",
-                    frequency: frequency, aggregation_method: aggmethod, units: units};
-
-        // params for getting value we're adjusting to.
-        var unitsParams = { api_key: constants.FRED_API_KEY, series_id: constants.CPI_SERIES_ID, 
-                    file_type: "json",
-                    frequency: frequency, aggregation_method: aggmethod, units: units};
         
         // Get the value we're adjusting to. Do this by getting it all and
         // using the latest value.
-        var getUnitsData = (function(cb) {
+        var getUnitsData = function(cb) {
             request({url: constants.FRED_REST_ENDPT, qs: unitsParams}, function(error, response, body) {
                 if( !error  && response.statusCode == 200) {
                     var bodyObj = JSON.parse(body).observations;
@@ -78,7 +75,25 @@ var Adjuster = function(data, frequency) {
                     throw error;
                 }
             });
-        });
+        };
+
+        var formatDate = function(date) {
+            var month = date.getUTCMonth() < 9 ? "0" + (1 + date.getUTCMonth()) : date.getUTCMonth() + 1;
+            var day = date.getUTCDate() < 10 ? "0" + date.getUTCDate() : date.getUTCDate();
+            return date.getUTCFullYear() + "-" + month + "-" + day;
+        };
+
+        // params for getting historical data.
+        var params = {observation_start: formatDate(startdate), observation_end: formatDate(enddate),
+                    api_key: constants.FRED_API_KEY, series_id: constants.CPI_SERIES_ID, 
+                    file_type: "json",
+                    frequency: frequency, aggregation_method: aggmethod, units: units};
+
+        // params for getting value we're adjusting to.
+        var unitsParams = { api_key: constants.FRED_API_KEY, series_id: constants.CPI_SERIES_ID, 
+                    file_type: "json",
+                    frequency: frequency, aggregation_method: aggmethod, units: units};
+        
 
         request({url: constants.FRED_REST_ENDPT, qs: params}, function(error, response, body) {
             if(!error && response.statusCode == 200) {
@@ -86,9 +101,9 @@ var Adjuster = function(data, frequency) {
                 var inflationObj = {};
                 inflationData.forEach(function(v, i, ar) {
                     if(v.value == ".") return;
-                    var dateString = v.date.substring(0, v.date.length - 3);
+                    //var dateString = v.date.substring(0, v.date.length - 3);
                     // keys in inflationObj look like YYYY-MM
-                    inflationObj[dateString] = v.value; 
+                    inflationObj[v.date] = v.value; 
                 });
                
                 // Get the value we're adjusting to and process all the data.
@@ -98,7 +113,7 @@ var Adjuster = function(data, frequency) {
                     var ret = [];
                     if(self.data) {
                         self.data.forEach(function(v, i, ar) {
-                            var thisDate = v[0].getFullYear() + "-" + v[0].getMonth();        
+                            var thisDate = formatDate(v[0]);
                             var thisValue = v[1];
                             if(thisDate in inflationObj) {
                                 var adjustedValue = thisValue * 1.0 * adjustmentIndex / inflationObj[thisDate];
