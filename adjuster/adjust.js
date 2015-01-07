@@ -116,7 +116,8 @@ var Adjuster = function(data, frequency) {
                             var thisDate = formatDate(v[0]);
                             var thisValue = v[1];
                             if(thisDate in inflationObj) {
-                                var adjustedValue = thisValue * 1.0 * adjustmentIndex / inflationObj[thisDate];
+                                var adjustedValue = Math.round(thisValue * 100.0 * adjustmentIndex / inflationObj[thisDate]);
+                                adjustedValue /= 100.0;
                                 ret.push([thisDate, thisValue, adjustedValue, inflationObj[thisDate], adjustmentIndex]);
                             } else {
                                 //Exception
