@@ -18,4 +18,7 @@ $(document).ready(function() {
         $(".content").html(data);
 
     });
+    $.get("/adjust", null, function(data, status, jqxhr) {
+        console.log(data);
+    });
 });
