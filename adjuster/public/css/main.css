@@ -5,7 +5,7 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 body {
-  margin: 0;
+  margin: 20px;
 }
 article,
 aside,
@@ -210,206 +210,6 @@ th {
   font-weight: normal;
   font-style: normal;
 }
-.icon {
-  font-family: 'QZIcons';
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-.icon-expand-arrow:before {
-  content: "\e607";
-}
-.icon-instagram:before {
-  content: "\e612";
-}
-.icon-link:before {
-  content: "\e61b";
-}
-.icon-share:before {
-  content: "\e61c";
-}
-.icon-reply-arrow:before {
-  content: "\e618";
-}
-.icon-star:before {
-  content: "\e619";
-}
-.icon-www:before {
-  content: "\e61a";
-}
-.icon-left-arrow:before {
-  content: "\e617";
-}
-.icon-annotations-rollover:before {
-  content: "\e600";
-}
-.icon-annotations:before {
-  content: "\e601";
-}
-.icon-camera:before {
-  content: "\e602";
-}
-.icon-close:before {
-  content: "\e603";
-}
-.icon-daily-brief:before {
-  content: "\e604";
-}
-.icon-down-arrow:before {
-  content: "\e605";
-}
-.icon-email:before {
-  content: "\e606";
-}
-.icon-facebook:before {
-  content: "\e608";
-}
-.icon-google-plus:before {
-  content: "\e609";
-}
-.icon-hamburrow:before {
-  content: "\e60a";
-}
-.icon-linkedin:before {
-  content: "\e60b";
-}
-.icon-pause:before {
-  content: "\e60c";
-}
-.icon-pinterest:before {
-  content: "\e60d";
-}
-.icon-play:before {
-  content: "\e60e";
-}
-.icon-quartz:before {
-  content: "\e60f";
-}
-.icon-search:before {
-  content: "\e610";
-}
-.icon-settings:before {
-  content: "\e611";
-}
-.icon-sponsored:before {
-  content: "\e613";
-}
-.icon-twitter:before {
-  content: "\e614";
-}
-.icon-whats-app:before {
-  content: "\e615";
-}
-.icon-zoom:before {
-  content: "\e616";
-}
-ul.share-buttons {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-li.share-icon {
-  display: inline-block;
-  font-size: 1.2em;
-}
-li.share-icon a {
-  text-decoration: none;
-  cursor: pointer;
-}
-.icon-email {
-  color: #0096b6;
-}
-.icon-email:hover {
-  color: #c3c5c0;
-}
-.icon-facebook {
-  color: #3b5998;
-}
-.icon-facebook:hover {
-  color: #c3c5c0;
-}
-.icon-linkedin {
-  color: #007bb6;
-}
-.icon-linkedin:hover {
-  color: #c3c5c0;
-}
-.icon-twitter {
-  color: #00aced;
-}
-.icon-twitter:hover {
-  color: #c3c5c0;
-}
-@media only screen and (max-width: 320px) {
-  #interactive-content {
-    font-size: 16px/26px "PT Serif", Georgia, serif;
-  }
-  #interactive-content h1 {
-    font-size: 40px;
-    line-height: 28px;
-  }
-  #interactive-content h2 {
-    font-size: 20px;
-    line-height: 20px;
-  }
-}
-@media only screen and (min-width: 480px) and (max-width: 650px) {
-  #interactive-content {
-    font: 16px/26px "PT Serif", Georgia, serif;
-  }
-  #interactive-content h1 {
-    font-size: 30px;
-    line-height: 28px;
-  }
-  #interactive-content h2 {
-    font-size: 20px;
-    line-height: 20px;
-  }
-}
-@media only screen and (min-width: 650px) and (max-width: 1024px) {
-  #interactive-content {
-    font: 20px/30px "PT Serif", Georgia, serif;
-  }
-  #interactive-content h1 {
-    font-size: 40px;
-    line-height: 28px;
-  }
-  #interactive-content h2 {
-    font-size: 24px;
-    line-height: 24px;
-  }
-}
-@media only screen and (min-width: 1024px) and (max-width: 1200px) {
-  #interactive-content {
-    font: 20px/30px "PT Serif", Georgia, serif;
-  }
-  #interactive-content h1 {
-    font-size: 40px;
-    line-height: 50px;
-  }
-  #interactive-content h2 {
-    font-size: 24px;
-    line-height: 24px;
-  }
-}
-@media only screen and (min-width: 1200px) {
-  #interactive-content {
-    font: 20px/30px "PT Serif", Georgia, serif;
-  }
-  #interactive-content h1 {
-    font-size: 48px;
-    line-height: 58px;
-  }
-  #interactive-content h2 {
-    font-size: 24px;
-    line-height: 24px;
-  }
-}
 html,
 body {
   min-width: 290px;
@@ -448,12 +248,9 @@ p {
   line-height: 1.6;
   color: #4c4c4c;
 }
-.item-body {
-  margin: 0 auto;
-  max-width: 940px;
+
+.data-form {
+    float: left;
+    width: 400px;
 }
-#interactive-content {
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-}
+

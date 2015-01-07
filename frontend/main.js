@@ -11,14 +11,14 @@ var data = { data: [
     { date: 2010, value: 64}
 ]};
 $(document).ready(function() {
-    $(document.body).append($("p").addClass("content"));
+    //$(document.body).append($("p").addClass("content"));
     console.log("ready");
     $.get("/adjust", data, function(data, status, jqxhr) {
         console.log(data);
-        $(".content").html(data);
+        //$(".content").append("<p>" + data.toString() + "</p>");
 
     });
-    $.get("/adjust", null, function(data, status, jqxhr) {
+    $.get("/adjust", function(data, status, jqxhr) {
         console.log(data);
     });
 });
