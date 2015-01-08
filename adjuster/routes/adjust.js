@@ -37,13 +37,17 @@ router.post("/data", function(req, res) {
     var fstream;
     req.pipe(req.busboy);
     req.busboy.on('file', function (fieldname, file, filename) {
-        console.log("Uploading: " + filename);
-        fstream = fs.createWriteStream(__dirname + '/../uploads/' + filename);
-        file.pipe(fstream);
-        fstream.on('close', function () {    
-            console.log("Upload Finished of " + filename);              
-            res.redirect('/');           //where to go next
-        });
+        if(filename) {
+            console.log("Uploading: " + filename);
+            fstream = fs.createWriteStream(__dirname + '/../uploads/' + filename);
+            file.pipe(fstream);
+            fstream.on('close', function () {    
+                console.log("Upload Finished of " + filename);              
+                res.redirect('/');           //where to go next
+            });
+        } else {
+            res.redirect('/');
+        }
     });
     req.busboy.on('field', function(fieldname, value) {
         console.log("filedname: " + fieldname + " value: " + value);
