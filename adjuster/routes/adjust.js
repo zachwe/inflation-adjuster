@@ -1,11 +1,7 @@
 var express = require('express');
-var path = require('path');
-var fs = require('fs-extra');
-var busboy = require('connect-busboy');
+var fs = require('fs');
 var Adjuster = require('../adjust');
 var router = express.Router();
-
-router.use(busboy());
 
 router.get('/', function(req, res) {
     var adjuster;
@@ -48,6 +44,9 @@ router.post("/data", function(req, res) {
             console.log("Upload Finished of " + filename);              
             res.redirect('/');           //where to go next
         });
+    });
+    req.busboy.on('field', function(fieldname, value) {
+        console.log("filedname: " + fieldname + " value: " + value);
     });
 });
 
