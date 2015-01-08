@@ -11,8 +11,24 @@ var data = { data: [
     { date: 2010, value: 64}
 ]};
 $(document).ready(function() {
-    //$(document.body).append($("p").addClass("content"));
     console.log("ready");
+    $(".data-form").submit(function(event) {
+        //event.preventDefault();
+        var formData = new FormData(this);
+        /*
+        $.ajax({
+            url: "/adjust/data",
+            type: "POST",
+            success: function(data) {
+                console.log(data);
+            },
+            data: formData,
+            contentTpe: false,
+            processData: false
+        });*/
+        console.log("submitted form");
+    });
+    /*
     $.get("/adjust", data, function(data, status, jqxhr) {
         console.log(data);
         //$(".content").append("<p>" + data.toString() + "</p>");
@@ -21,4 +37,5 @@ $(document).ready(function() {
     $.get("/adjust", function(data, status, jqxhr) {
         console.log(data);
     });
+    */
 });

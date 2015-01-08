@@ -1,6 +1,11 @@
 var express = require('express');
+var path = require('path');
+var fs = require('fs-extra');
+var busboy = require('connect-busboy');
 var Adjuster = require('../adjust');
 var router = express.Router();
+
+router.use(busboy());
 
 router.get('/', function(req, res) {
     var adjuster;
@@ -30,6 +35,20 @@ router.get('/', function(req, res) {
     if(req.data) {
         var data = req.data;
     }
+});
+
+router.post("/data", function(req, res) {
+    var fstream;
+    req.pipe(req.busboy);
+    req.busboy.on('file', function (fieldname, file, filename) {
+        console.log("Uploading: " + filename);
+        fstream = fs.createWriteStream(__dirname + '/../uploads/' + filename);
+        file.pipe(fstream);
+        fstream.on('close', function () {    
+            console.log("Upload Finished of " + filename);              
+            res.redirect('/');           //where to go next
+        });
+    });
 });
 
 module.exports = router;

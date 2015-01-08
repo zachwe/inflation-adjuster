@@ -6,12 +6,11 @@ block content
     p 
       | It uses the 
       a(href="http://api.stlouisfed.org/docs/fred/series_observations.html") St. Louis FRED API
-      |  to fetch the CPI data that it uses for inflation adjustment.
-    form(class="data-form")
-        p Upload a csv file.
-          input(type="file" id="fileinput")
-          textarea(name="data_area" rows="10" cols="50") Paste data in here or upload a csv file.
-          button(type="submit" id="submit-button") Adjust
+      |  to fetch the data that it uses for inflation adjustment. Data used is the Consumer Price Index for All Urban Consumers (CPIAUCSL), and is available dating back to 1947.
+    form(class="data-form" enctype="multipart/form-data" action="/adjust/data" method="post")
+        input(name="file" type="file" id="fileinput")
+        textarea(name="data_area" rows="10" cols="50") Paste data in here or upload a csv file.
+        button(type="submit" id="submit-button") Adjust
 
         
     div(class="content")
