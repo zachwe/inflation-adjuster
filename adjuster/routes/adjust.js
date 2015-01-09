@@ -36,21 +36,31 @@ router.get('/', function(req, res) {
 router.post("/data", function(req, res) {
     var fstream;
     req.pipe(req.busboy);
+    var fileData = "";
     req.busboy.on('file', function (fieldname, file, filename) {
         if(filename) {
             console.log("Uploading: " + filename);
+            file.on('data', function(d) {
+                fileData += d.toString('utf8');
+            });
+            file.on('end', function() {
+                console.log(fileData.length);
+                console.log("Upload Finished of " + filename); 
+            });
+            /*
             fstream = fs.createWriteStream(__dirname + '/../uploads/' + filename);
             file.pipe(fstream);
             fstream.on('close', function () {    
-                console.log("Upload Finished of " + filename);              
                 res.redirect('/');           //where to go next
             });
+            */
         } else {
-            res.redirect('/');
+            //res.redirect('/');
         }
     });
     req.busboy.on('field', function(fieldname, value) {
-        console.log("filedname: " + fieldname + " value: " + value);
+        //console.log("filedname: " + fieldname);
+        console.log(" value: " + value);
     });
 });
 
