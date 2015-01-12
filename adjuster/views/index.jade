@@ -12,5 +12,5 @@ block content
         textarea(name="data_area" rows="10" cols="50") Paste data in here or upload a csv file.
         button(type="submit" id="submit-button") Adjust
 
-        
-    div(class="content")
+    div(class="content" style="display: #{display_output};")
+        textarea(name="output" rows="#{length}" cols="50" readonly) #{text}
