@@ -6,7 +6,13 @@ block content
     p 
       | It uses the 
       a(href="http://api.stlouisfed.org/docs/fred/series_observations.html") St. Louis FRED API
-      |  to fetch the data that it uses for inflation adjustment. Data used is the Consumer Price Index for All Urban Consumers (CPIAUCSL), and is available dating back to 1947.
+      |  to fetch the data that it uses for inflation adjustment. Data used is
+      | the Consumer Price Index for All Urban Consumers (a.k.a. CPIAUCSL or CPI-U), and is available dating back to 1947.
+    p
+      | Both the text box and the file upload should understand csv and tsv
+      | data consisting of a date and a number that represents a US dollar amount.
+      | Make sure one the name of the date column is "date".
+      | The other column can be called whatever you want.
     div(class="container")
         div(class="content")
             form(class="data-form" enctype="multipart/form-data" action="/adjust/data" method="post")
