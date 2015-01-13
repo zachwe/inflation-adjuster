@@ -26,7 +26,7 @@ var Adjuster = function(data, opts) {
     }
     var self = this;
 
-    this.getInflationNumbers = function(opts, dataHandler) {
+    this.getInflationNumbers = function(opts, dataHandler, errorHandler) {
         // The FRED api will give you dates on the first of the month. So, we
         // don't have to do any hard work in enforcing compliance... if someone
         // gives us a date on August 18, just send it in as-is and the api will give
@@ -61,7 +61,6 @@ var Adjuster = function(data, opts) {
         
         // Get the value we're adjusting to. Do this by getting it all and
         // using the latest value.
-        // Throws: Error if request fails
         var getUnitsData = function(cb) {
             request({url: constants.FRED_REST_ENDPT, qs: unitsParams}, function(error, response, body) {
                 if( !error  && response.statusCode == 200) {
@@ -73,8 +72,8 @@ var Adjuster = function(data, opts) {
                     var data = [bodyObj[index].date, bodyObj[index].value];
                     cb(data);
                 } else {
-                    //Exception
-                    throw error;
+                    // Request to FRED failed.
+                    errorHandler(new Error("We couldn't get the data we needed. Try again later."));
                 }
             });
         };
@@ -99,7 +98,6 @@ var Adjuster = function(data, opts) {
                     observation_end: formatDate(self.adjustDate),
                     frequency: "a", aggregation_method: aggmethod, units: units};
         
-
         request({url: constants.FRED_REST_ENDPT, qs: params}, function(error, response, body) {
             if(!error && response.statusCode == 200) {
                 var inflationData = JSON.parse(body).observations;
@@ -109,44 +107,48 @@ var Adjuster = function(data, opts) {
                     // keys in inflationObj look like YYYY-MM-DD
                     inflationObj[v.date] = v.value; 
                 });
-               
+            
                 // Get the value we're adjusting to and process all the data.
-                getUnitsData(function(unitdata) {
-                    var inflationAdjustedYear = unitdata[0].split("-")[0],
-                        adjustmentIndex = unitdata[1];
-                    var retData = [];
-                    var retObj = {data: retData, adjustDate: inflationAdjustedYear};
-                    if(self.data) {
-                        self.data.forEach(function(v, i, ar) {
-                            var keyDate = new Date(v[0].getTime());
-                            keyDate.setUTCDate(1);
-                            if(self.frequency == "a") {
-                                keyDate.setUTCMonth(0);
-                            }
-                            var key = formatDate(keyDate);
-                            var thisDate = formatDate(v[0]);
-                            var thisValue = v[1];
-                            if(key in inflationObj) {
-                                var adjustedValue = Math.round(thisValue * 100.0 * adjustmentIndex / inflationObj[key]);
-                                adjustedValue /= 100.0;
-                                retData.push([thisDate, thisValue, adjustedValue, inflationObj[key], adjustmentIndex]);
-                            } else {
-                                throw new Error("We couldn't find those dates. Maybe make sure they're in the proper date range and try again?");
-                            }
-                        });
-                    } else {
-                        // If we've got no user-provided data to adjust... just
-                        // adjust $1.
-                        Object.keys(inflationObj).sort().forEach(function(v, i, ar) {
-                            var adjustedValue = 1.0 * adjustmentIndex / inflationObj[v];
-                            retData.push([v, 1.0, adjustedValue, inflationObj[v], adjustmentIndex]);
-                        });
-                    }
-                    dataHandler(retObj);
-                });
+                try {
+                    getUnitsData(function(unitdata) {
+                        var inflationAdjustedYear = unitdata[0].split("-")[0],
+                            adjustmentIndex = unitdata[1];
+                        var retData = [];
+                        var retObj = {data: retData, adjustDate: inflationAdjustedYear};
+                        if(self.data) {
+                            self.data.forEach(function(v, i, ar) {
+                                var keyDate = new Date(v[0].getTime());
+                                keyDate.setUTCDate(1);
+                                if(self.frequency == "a") {
+                                    keyDate.setUTCMonth(0);
+                                }
+                                var key = formatDate(keyDate);
+                                var thisDate = formatDate(v[0]);
+                                var thisValue = v[1];
+                                if(key in inflationObj) {
+                                    var adjustedValue = Math.round(thisValue * 100.0 * adjustmentIndex / inflationObj[key]);
+                                    adjustedValue /= 100.0;
+                                    retData.push([thisDate, thisValue, adjustedValue, inflationObj[key], adjustmentIndex]);
+                                } else {
+                                    throw new Error("We couldn't find those dates. Maybe make sure they're in the proper date range and try again?");
+                                }
+                            });
+                        } else {
+                            // If we've got no user-provided data to adjust... just
+                            // adjust $1.
+                            Object.keys(inflationObj).sort().forEach(function(v, i, ar) {
+                                var adjustedValue = 1.0 * adjustmentIndex / inflationObj[v];
+                                retData.push([v, 1.0, adjustedValue, inflationObj[v], adjustmentIndex]);
+                            });
+                        }
+                        dataHandler(retObj);
+                    });
+                } catch (e) {
+                    throw e;
+                }
             } else {
-                // Exception
-                throw error;
+                // Request to FRED failed.
+                errorHandler(new Error("We couldn't get the data we needed. Try again later."));
             }
         });
     };

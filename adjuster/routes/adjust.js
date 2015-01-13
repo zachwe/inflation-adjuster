@@ -7,35 +7,11 @@ var Adjuster = require('../adjust');
 
 var router = express.Router();
 
-router.get('/data', function(req, res) {
-    res.redirect('/');
-});
-
 router.get('/', function(req, res) {
     res.redirect('/');
-    //don't do this other junk.
-    var adjuster;
-    if(req.query.data && req.query.data.length > 0) {
-        var keys = Object.keys(req.query.data[0]);
-        if(keys.indexOf("date") != -1 && keys.length == 2) {
-            var valueName = keys[1 - keys.indexOf("date")];
-            var flatData = req.query.data.map(function(v, i, ar) {
-                var date = new Date("" + v.date);
-                return [date, v[valueName]];
-            });
-            adjuster = new Adjuster(flatData);
-            adjuster.getInflationNumbers({}, function(data){
-                res.send(data); 
-            });
-        } else {
-            response.status(400).send("Your data is formatted poorly.");
-        }
-    } else {
-        res.redirect('/');
-    }
 });
 
-router.post("/data", function(req, res) {
+router.post("/", function(req, res) {
     req.pipe(req.busboy);
     var fileData = "",
         fieldData,
@@ -61,6 +37,13 @@ router.post("/data", function(req, res) {
                     text: text,
                     display_output: "block",
                     adjust_date: d.adjustDate
+                };
+                res.render('index', renderParams);
+            },
+            function(err) {
+                var renderParams = {
+                    display_output: "none",
+                    error: err.message
                 };
                 res.render('index', renderParams);
             });

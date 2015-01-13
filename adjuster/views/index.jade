@@ -17,7 +17,7 @@ block content
         div(class="content")
             if error
                 p(class="error") #{error}
-            form(class="data-form" enctype="multipart/form-data" action="/adjust/data" method="post")
+            form(class="data-form" enctype="multipart/form-data" action="/adjust/" method="post")
                 p Adjust to US dollars in: 
                     - var n = 1947
                     select(name="adjust_date")
