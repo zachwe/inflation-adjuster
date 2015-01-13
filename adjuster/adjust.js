@@ -32,7 +32,7 @@ var Adjuster = function(data, frequency) {
         // back August 1. 
         // m, q, sa, or a.
         // For monthly, quarterly, semi-annual, or annual.
-        var frequency = opts.freq || "a",
+        var frequency = this.frequency || "a",
         // sum, eop, avg. Only use avg realistically.
             aggmethod = opts.agg || "avg",
             target = opts.target || "9999-12-31",
@@ -113,6 +113,10 @@ var Adjuster = function(data, frequency) {
                     var ret = [];
                     if(self.data) {
                         self.data.forEach(function(v, i, ar) {
+                            if(self.frequency == "a") {
+                                v[0].setUTCDate(1);
+                                v[0].setUTCMonth(0);
+                            }
                             var thisDate = formatDate(v[0]);
                             var thisValue = v[1];
                             if(thisDate in inflationObj) {
@@ -121,7 +125,7 @@ var Adjuster = function(data, frequency) {
                                 ret.push([thisDate, thisValue, adjustedValue, inflationObj[thisDate], adjustmentIndex]);
                             } else {
                                 //Exception
-                                throw "You screwed up and didn't get the right dates from FRED.";
+                                throw new Error("You fetched the wrong dates from FRED!");
                             }
                         });
                     } else {

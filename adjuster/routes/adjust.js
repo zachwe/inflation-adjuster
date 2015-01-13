@@ -37,8 +37,8 @@ router.get('/', function(req, res) {
 router.post("/data", function(req, res) {
     var fstream;
     req.pipe(req.busboy);
-    var fileData = "";
-    var waitForFile = true;
+    var fileData = "",
+        fieldData;
     var fileExists = false;
     var adjustAndRespond = function(value) {
         var data = formatParsedData(value);
@@ -48,9 +48,9 @@ router.post("/data", function(req, res) {
         adjuster = new Adjuster(data);
         adjuster.getInflationNumbers({}, function(d) {
             var retData = d.map(function(v, i, ar) {
-                return v.slice(0, 3).join("\t\t\t\t"); 
+                return v.slice(0, 3).join("\t\t\t"); 
             });
-            var columns = "year\t\t\t\tunadjusted value\t\t\t\tadjusted value\n";
+            var columns = "year\t\t\tunadjusted value\t\t\tadjusted value\n";
             var text = columns + retData.join("\n");
             var renderParams = {
                 length: d.length + 10,
@@ -62,40 +62,27 @@ router.post("/data", function(req, res) {
 
     };
     req.busboy.on('file', function (fieldname, file, filename) {
-        waitForFile = false;
-        if(filename) {
-            file.on('data', function(d) {
-                fileExists = true;
-                fileData += d.toString('utf8');
-            });
-            file.on('end', function() {
-                fileExists = true;
-                console.log("Upload Finished of " + filename); 
-                process.nextTick(function() {
-                    adjustAndRespond(fileData);
-                });
-            });
-        } 
+        file.on('data', function(d) {
+            fileData += d.toString('utf8');
+        });
+        file.on('end', function() {
+            console.log("Upload Finished of " + filename); 
+        });
     });
     req.busboy.on('field', function(fieldname, value) {
-        var handleNoFile = function(d) {
-            if(! waitForFile) {
-                if(fileExists) {
-                    // Do nothing, let the busboy file handler do stuff.
-                    return;
-                } else {
-                    process.nextTick(function() {
-                        adjustAndRespond(value);
-                    });
-                }
-            } else {
-                process.nextTick(function() {
-                    handleNoFile(d);
-                });
-            }
-        };
         if(fieldname == "data_area") {
-            handleNoFile(value);
+            fieldData = value;
+        }
+    });
+    req.busboy.on('finish',function() {
+        if(fileData) {
+            process.nextTick(function() {
+                adjustAndRespond(fileData);
+            });
+        } else {
+            process.nextTick(function() {
+                adjustAndRespond(fieldData);
+            });
         }
     });
 });
