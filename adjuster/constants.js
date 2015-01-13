@@ -6,7 +6,8 @@
 var constants = {
     FRED_REST_ENDPT: "http://api.stlouisfed.org/fred/series/observations",
     CPI_SERIES_ID: "CPIAUCSL",
-    FRED_API_KEY:  process.env.FRED_API_KEY
+    FRED_API_KEY:  process.env.FRED_API_KEY,
+    LATEST: "2013"
     
 };
 

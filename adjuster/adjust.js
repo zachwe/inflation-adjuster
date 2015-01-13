@@ -2,13 +2,13 @@ var request = require('request');
 var ndarray = require('ndarray');
 var constants = require("./constants");
 
-var Adjuster = function(data, frequency) {
+var Adjuster = function(data, opts) {
     // Let's have data be an array of arrays. [[d1, v1], [d2, v2], ...]
     // the d's should be Date objects. v's should be integers.
     this.data = data;
     if(this.data) {
         // supply the frequency or guess.
-        this.frequency = frequency || (function(d) {
+        this.frequency = opts.frequency || (function(d) {
             var dateDict = {};
             var ret = "a";
             d.forEach(function(v, i, ar) {
@@ -22,6 +22,7 @@ var Adjuster = function(data, frequency) {
             });
             return ret;
         })(this.data);
+        this.adjustDate = new Date(opts.adjustDate || constants.LATEST);
     }
     var self = this;
 
@@ -60,6 +61,7 @@ var Adjuster = function(data, frequency) {
         
         // Get the value we're adjusting to. Do this by getting it all and
         // using the latest value.
+        // Throws: Error if request fails
         var getUnitsData = function(cb) {
             request({url: constants.FRED_REST_ENDPT, qs: unitsParams}, function(error, response, body) {
                 if( !error  && response.statusCode == 200) {
@@ -77,10 +79,10 @@ var Adjuster = function(data, frequency) {
             });
         };
 
-        var formatDate = function(date) {
+        var formatDate = function(date, includeDay) {
             var month = date.getUTCMonth() < 9 ? "0" + (1 + date.getUTCMonth()) : date.getUTCMonth() + 1;
-            var day = date.getUTCDate() < 10 ? "0" + date.getUTCDate() : date.getUTCDate();
-            return date.getUTCFullYear() + "-" + month + "-" + day;
+                var day = date.getUTCDate() < 10 ? "0" + date.getUTCDate() : date.getUTCDate();
+                return date.getUTCFullYear() + "-" + month + "-" + day;
         };
 
         // params for getting historical data.
@@ -90,9 +92,12 @@ var Adjuster = function(data, frequency) {
                     frequency: frequency, aggregation_method: aggmethod, units: units};
 
         // params for getting value we're adjusting to.
-        var unitsParams = { api_key: constants.FRED_API_KEY, series_id: constants.CPI_SERIES_ID, 
-                    file_type: "json",
-                    frequency: frequency, aggregation_method: aggmethod, units: units};
+        // Only use year as frequency, because it doesn't seem like people ever
+        // talk about adjusting inflation month to month. This might be wrong.
+        var unitsParams = { api_key: constants.FRED_API_KEY, series_id: constants.CPI_SERIES_ID,
+                    file_type: "json", observation_start: formatDate(self.adjustDate),
+                    observation_end: formatDate(self.adjustDate),
+                    frequency: "a", aggregation_method: aggmethod, units: units};
         
 
         request({url: constants.FRED_REST_ENDPT, qs: params}, function(error, response, body) {
@@ -101,31 +106,32 @@ var Adjuster = function(data, frequency) {
                 var inflationObj = {};
                 inflationData.forEach(function(v, i, ar) {
                     if(v.value == ".") return;
-                    //var dateString = v.date.substring(0, v.date.length - 3);
-                    // keys in inflationObj look like YYYY-MM
+                    // keys in inflationObj look like YYYY-MM-DD
                     inflationObj[v.date] = v.value; 
                 });
                
                 // Get the value we're adjusting to and process all the data.
                 getUnitsData(function(unitdata) {
-                    var inflationAdjustedYear = unitdata[0],
+                    var inflationAdjustedYear = unitdata[0].split("-")[0],
                         adjustmentIndex = unitdata[1];
-                    var ret = [];
+                    var retData = [];
+                    var retObj = {data: retData, adjustDate: inflationAdjustedYear};
                     if(self.data) {
                         self.data.forEach(function(v, i, ar) {
+                            var keyDate = new Date(v[0].getTime());
+                            keyDate.setUTCDate(1);
                             if(self.frequency == "a") {
-                                v[0].setUTCDate(1);
-                                v[0].setUTCMonth(0);
+                                keyDate.setUTCMonth(0);
                             }
+                            var key = formatDate(keyDate);
                             var thisDate = formatDate(v[0]);
                             var thisValue = v[1];
-                            if(thisDate in inflationObj) {
-                                var adjustedValue = Math.round(thisValue * 100.0 * adjustmentIndex / inflationObj[thisDate]);
+                            if(key in inflationObj) {
+                                var adjustedValue = Math.round(thisValue * 100.0 * adjustmentIndex / inflationObj[key]);
                                 adjustedValue /= 100.0;
-                                ret.push([thisDate, thisValue, adjustedValue, inflationObj[thisDate], adjustmentIndex]);
+                                retData.push([thisDate, thisValue, adjustedValue, inflationObj[key], adjustmentIndex]);
                             } else {
-                                //Exception
-                                throw new Error("You fetched the wrong dates from FRED!");
+                                throw new Error("We couldn't find those dates. Maybe make sure they're in the proper date range and try again?");
                             }
                         });
                     } else {
@@ -133,10 +139,10 @@ var Adjuster = function(data, frequency) {
                         // adjust $1.
                         Object.keys(inflationObj).sort().forEach(function(v, i, ar) {
                             var adjustedValue = 1.0 * adjustmentIndex / inflationObj[v];
-                            ret.push([v, 1.0, adjustedValue, inflationObj[v], adjustmentIndex]);
+                            retData.push([v, 1.0, adjustedValue, inflationObj[v], adjustmentIndex]);
                         });
                     }
-                    dataHandler(ret);
+                    dataHandler(retObj);
                 });
             } else {
                 // Exception
