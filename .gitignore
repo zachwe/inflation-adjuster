@@ -1,6 +1,6 @@
 node_modules/
-build
 .DS_Store
 .tmp
 .*
 !.gitignore
+adjuster/public/javascripts/main.js
