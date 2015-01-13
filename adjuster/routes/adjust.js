@@ -35,7 +35,7 @@ router.post("/", function(req, res) {
                 var renderParams = {
                     length: d.length + 10,
                     text: text,
-                    display_output: "block",
+                    display_output: "inline",
                     adjust_date: d.adjustDate
                 };
                 res.render('index', renderParams);
