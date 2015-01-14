@@ -34,7 +34,8 @@ router.post("/", function(req, res) {
                 var text = columns + retData.join("\n");
                 var renderParams = {
                     length: d.length + 10,
-                    text: text,
+                    output_text: text,
+                    data_area_text: value,
                     display_output: "inline",
                     adjust_date: d.adjustDate
                 };
@@ -51,7 +52,8 @@ router.post("/", function(req, res) {
             // The data was poorly formatted or just plain not there.
             res.render('index', {
                 display_output: "none",
-                error: e.message
+                error: e.message,
+                data_area_text: value
             });
             return;
         }

@@ -26,9 +26,13 @@ block content
                                 - n++
                         option(value="#{n}" selected) #{n}
                 div(class="content") 
-                    textarea(name="data_area" rows="10" cols="50") Paste data in here or upload a csv file.
+                    textarea(name="data_area" rows="10" cols="50") 
+                        if data_area_text
+                            | #{data_area_text}
+                        else
+                            | Paste data in here or upload a csv file.
                     div(class="content" style="display: #{display_output};")
-                        textarea(name="output" rows="10" cols="50" readonly) #{text}
+                        textarea(name="output" rows="10" cols="50" readonly) #{output_text}
                 p
                     input(name="file" type="file" id="fileinput")
                 p
