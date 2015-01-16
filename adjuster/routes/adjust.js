@@ -93,7 +93,7 @@ router.post("/", function(req, res) {
 
 var formatParsedData = function(data, response) {
     var parsed = BabyParse.parse(data);
-    if(! (parsed.data[0][0] == "date" || parsed.data[0][1] == "date")) {
+    if(! (parsed.data[0][0].toLowerCase() == "date" || parsed.data[0][1] == "date")) {
         throw new Error("We couldn't deal with your data. Make sure that it's in a valid csv or tsv format");
     }
 
