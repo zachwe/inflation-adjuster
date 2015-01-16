@@ -4,6 +4,7 @@ var fs = require('fs');
 var BabyParse = require('babyparse');
 var querystring = require('querystring');
 var Adjuster = require('../adjust');
+var util = require('../util');
 
 var router = express.Router();
 
@@ -24,13 +25,16 @@ router.post("/", function(req, res) {
             if(! data) {
                 res.redirect('/');
             }
-            adjuster = new Adjuster(data, {adjustDate: adjustDate});
+            adjuster = new Adjuster(data, {adjustDate: adjustDate, frequency: "a"});
             adjuster.getInflationNumbers({}, function(d) {
                 var retData = d.data.map(function(v, i, ar) {
                     return v.slice(0, 3).join("\t"); 
                 });
+                var displayDate = d.adjustDate.split("-");
+                var displayMonth = d.adjustDateFrequency == "m" ? util.getMonthString(displayDate[1] - 1) + ", " : "";
+                var displayYear = displayDate[0];
                 var columns = "date\toriginal value\tvalue in " + 
-                                d.adjustDate + " dollars\n";
+                                displayMonth + displayYear + " dollars\n";
                 var text = columns + retData.join("\n");
                 var renderParams = {
                     length: d.length + 10,
@@ -44,7 +48,8 @@ router.post("/", function(req, res) {
             function(err) {
                 var renderParams = {
                     display_output: "none",
-                    error: err.message
+                    error: err.message,
+                    data_area_text: value
                 };
                 res.render('index', renderParams);
             });
@@ -70,7 +75,7 @@ router.post("/", function(req, res) {
         if(fieldname == "data_area") {
             fieldData = value;
         } else if(fieldname == "adjust_date") {
-            adjustDate = value;
+            adjustDate = new Date(value);
         }
     });
     req.busboy.on('finish',function() {

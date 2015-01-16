@@ -21,10 +21,10 @@ block content
                 p Adjust to US dollars in: 
                     - var n = 1947
                     select(name="adjust_date")
-                        while n < 2013
+                        while n < 2015
                             option(value="#{n}") #{n}
                                 - n++
-                        option(value="#{n}" selected) #{n}
+                        option(value="9999-12-31" selected) Latest available
                 div(class="content") 
                     textarea(name="data_area" rows="10" cols="50") 
                         if data_area_text
