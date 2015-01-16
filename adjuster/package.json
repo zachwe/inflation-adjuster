@@ -2,13 +2,11 @@
   "name": "adjuster",
   "version": "0.0.1",
   "private": true,
-  "scripts": {
-    "start": "node ./bin/www"
-  },
   "dependencies": {
     "async": "^0.9.0",
     "babyparse": "^0.4.1",
     "body-parser": "~1.0.0",
+    "connect-busboy": "0.0.2",
     "cookie-parser": "~1.0.1",
     "debug": "~0.7.4",
     "express": "~4.2.0",
