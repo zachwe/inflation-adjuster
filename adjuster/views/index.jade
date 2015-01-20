@@ -38,3 +38,32 @@ block content
                     input(name="file" type="file" id="fileinput")
                 p
                     button(type="submit" id="submit-button") Adjust
+        h4 FAQ
+        p
+            strong Q: It said it couldn't handle my data!
+        p A: Here are the most likely scenarios:
+        ol
+            li
+                | The data has more than two columns. Sorry--for now, we can only
+                | handle two columns at a time: one "date" column and another column.
+            li 
+                | Your data is not valid tsv or csv. If it looks right, it might be
+                | that the columns are separated by spaces rather than tab characters. Copy-pasting from Excel should
+                | work fine. 
+            li
+                | The computer doesn't understand your dates. It's actually pretty
+                | good and can understand things like "1999", "8/18/91", "September,
+                | 1963", and some other stuff. But it could get confused.
+            li
+                | Some dates are in the future or before 1947. Sorry, it can only
+                | handle 1947-2015 for now.
+        p
+            strong Q: I typed stuff in the text box and also chose a file. Which is it going to use?
+        p A: The file.
+        p
+            strong Q: How does this work?
+        p 
+          | It adjusts prices using the US Consumer Price Index. 
+          a(href="/cpi" target="_blank") Here
+          |  is the annual CPI data. You can try adjusting this data--the
+          | adjusted values will be identical.
