@@ -27,7 +27,7 @@ block content
                         option(value="2014" selected) 2014
                         option(value="9999-12-31" ) Latest available
                 div(class="content") 
-                    textarea(name="data_area" rows="10" cols="50") 
+                    textarea(name="data_area" id="data_area" rows="10" cols="50") 
                         if data_area_text
                             | #{data_area_text}
                         else
@@ -66,4 +66,4 @@ block content
           | A: It adjusts prices using the US Consumer Price Index. 
           a(href="/cpi" target="_blank") Here
           |  is the annual CPI data. You can try adjusting this data--the
-          | adjusted values will be identical.
+          | adjusted values will all be the same.
